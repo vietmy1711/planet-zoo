@@ -25,7 +25,21 @@ class AnimalDetailScreen extends StatelessWidget {
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                Text('Animal Class: ${animal.animalClassId}'),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text.rich(
+                    TextSpan(
+                      text: 'Class: ',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                      children: [
+                        TextSpan(
+                            text: animal.animalClassId,
+                            style: TextStyle(fontWeight: FontWeight.normal)),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

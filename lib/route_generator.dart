@@ -20,9 +20,8 @@ class RouteGenerator {
       case homeRoute:
         return MaterialPageRoute(
           settings: settings,
-          builder: (_) => BlocProvider<SearchBloc>(
-            create: (context) =>
-                SearchBloc(apiProvider: context.read<ApiProvider>()),
+          builder: (context) => BlocProvider<SearchBloc>.value(
+            value: context.read<SearchBloc>(),
             child: const NavigationScreen(),
           ),
         );

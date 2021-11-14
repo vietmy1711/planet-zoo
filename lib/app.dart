@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:planet_zoo/apis/api_provider.dart';
 
+import 'bloc/search/search_bloc.dart';
 import 'route_generator.dart';
 
 class App extends StatelessWidget {
@@ -15,12 +16,20 @@ class App extends StatelessWidget {
           create: (context) => ApiProvider.getInstance(dioHttpClient: Dio()),
         )
       ],
-      child: MaterialApp(
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<SearchBloc>(
+            create: (context) =>
+                SearchBloc(apiProvider: context.read<ApiProvider>()),
+          ),
+        ],
+        child: MaterialApp(
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          onGenerateRoute: RouteGenerator.generateRoute,
+          initialRoute: homeRoute,
         ),
-        onGenerateRoute: RouteGenerator.generateRoute,
-        initialRoute: homeRoute,
       ),
     );
   }
