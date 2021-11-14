@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:planet_zoo/theme.dart';
 import 'package:any_link_preview/any_link_preview.dart';
 
 import '../route_generator.dart';
 import '../widgets/avatar_widget.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final InAppBrowser browser = InAppBrowser();
+  final options = InAppBrowserClassOptions(
+      crossPlatform: InAppBrowserOptions(hideUrlBar: false),
+      inAppWebViewGroupOptions: InAppWebViewGroupOptions(
+          crossPlatform: InAppWebViewOptions(javaScriptEnabled: true)));
 
   @override
   Widget build(BuildContext context) {
@@ -84,34 +96,54 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: AnyLinkPreview(
-                link:
-                    "https://vnexpress.net/de-xuat-tat-ca-quan-duoc-ban-bia-ruou-4385339.html",
-                displayDirection: UIDirection.UIDirectionVertical,
-                showMultimedia: true,
-                bodyMaxLines: 5,
-                bodyTextOverflow: TextOverflow.ellipsis,
-                titleStyle: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-                bodyStyle: const TextStyle(color: Colors.grey, fontSize: 12),
-                errorBody: 'Show my custom error body',
-                errorTitle: 'Show my custom error title',
-                errorWidget: Container(
-                  color: Colors.grey[300],
-                  child: const Text('Oops!'),
-                ),
-                errorImage: "https://google.com/",
-                cache: const Duration(days: 7),
-                backgroundColor: Colors.grey[300],
-                borderRadius: 12,
-                removeElevation: false,
-                boxShadow: const [BoxShadow(blurRadius: 3, color: Colors.grey)],
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: _buildNews(
+                          'https://www.nationalgeographic.com/animals/article/pangolin-scale-trade-shipments-growing',
+                        ),
+                      ),
+                      Expanded(
+                        child: _buildNews(
+                          'https://www.savepangolins.org/news/2021/8/7/saving-pangolins-from-electric-fencing-in-south-africa',
+                        ),
+                      ),
+                    ],
+                  ),
+                  _buildNews(
+                    'https://www.independent.co.uk/news/world/world-elephant-day-rescuing-an-elephant-a9664956.html',
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _buildNews(
+                          'https://biglife.org/program-updates/big-life-news/african-elephants-now-listed-as-endangered?gclid=Cj0KCQiAhMOMBhDhARIsAPVml-HT4WcR9jIMhk-Nvdfs2SH9lv8sszct0RvKW37rg-N_hYhejGGDkPAaAgcjEALw_wcB',
+                        ),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: _buildNews(
+                          'https://www.independent.co.uk/climate-change/news/amur-leopard-scotland-critically-endangered-released-russia-a8440381.html',
+                        ),
+                      ),
+                    ],
+                  ),
+                  ...[
+                    'https://newsroom.wcs.org/News-Releases/articleType/ArticleView/articleId/11440/New-Study-An-Estimated-84-Highly-Endangered-Amur-Leopards-Remain-in-the-Wild-in-China-and-Russia.aspx',
+                    'https://vietnamnews.vn/environment/991858/google-wwf-viet-nam-join-forces-in-saola-conservation-campaign.html',
+                    'https://www.iucn.org/news/species-survival-commission/202108/iucn-ssc-experts-urge-immediate-action-find-saola-its-too-late',
+                    'https://www.arcusfoundation.org/stories-of-impact/great-apes/sumatran-orangutans-benefit-action-illegal-trade-logging/?utm_term=%2Bsumatran%20%2Borangutan&utm_campaign=Arcus+%7C+Stories+of+Impact&utm_source=adwords&utm_medium=ppc&hsa_acc=2137832502&hsa_cam=823220785&hsa_grp=50062027620&hsa_ad=235543964058&hsa_src=g&hsa_tgt=kwd-388560979113&hsa_kw=%2Bsumatran%20%2Borangutan&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gclid=Cj0KCQiAhMOMBhDhARIsAPVml-FhtEkDsKULTEstSy-fcVMlKFStj9r__xFOgFyeP1v36z7kDpi1Q_4aArSoEALw_wcB',
+                    'https://economictimes.indiatimes.com/news/environment/flora-fauna/new-population-of-sumatran-orangutans-found-living-in-highlands/articleshow/51289660.cms'
+                  ].map((e) => _buildNews(e)),
+                ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -191,6 +223,44 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNews(String link) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
+      child: InkWell(
+        onTap: () => browser.openUrlRequest(
+            urlRequest: URLRequest(url: Uri.parse(link)), options: options),
+        child: IgnorePointer(
+          child: AnyLinkPreview(
+            link: link,
+            displayDirection: UIDirection.UIDirectionVertical,
+            showMultimedia: true,
+            bodyMaxLines: 5,
+            bodyTextOverflow: TextOverflow.ellipsis,
+            titleStyle: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+            bodyStyle:
+                TextStyle(color: Colors.black.withOpacity(0.8), fontSize: 14),
+            errorWidget: Container(
+              color: Colors.grey[300],
+              child: const Text('Oops!'),
+            ),
+            errorImage: "https://google.com/",
+            cache: const Duration(days: 7),
+            backgroundColor: Colors.white,
+            borderRadius: 16,
+            removeElevation: false,
+            boxShadow: [
+              BoxShadow(blurRadius: 1, color: Colors.black.withOpacity(0.2))
             ],
           ),
         ),

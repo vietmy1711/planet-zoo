@@ -59,7 +59,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
-      navBarStyle: NavBarStyle.style1,
+      navBarStyle: NavBarStyle.simple,
       floatingActionButton: FloatingActionButton(
         backgroundColor: warningColor,
         child: const Icon(Icons.call),
@@ -84,13 +84,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.home),
+        icon: const Icon(Icons.home_filled),
         title: ("Home"),
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.settings),
+        icon: const Icon(Icons.search),
         title: ("Explore"),
         activeColorPrimary: primaryColor,
         inactiveColorPrimary: CupertinoColors.systemGrey,
