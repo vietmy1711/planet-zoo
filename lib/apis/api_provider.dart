@@ -37,13 +37,11 @@ class ApiProvider {
     return animals;
   }
 
-  Future<List<Animal>> getAllAnimalById(int id) async {
+  Future<Animal> getAnimalById(int id) async {
     final response = await dioHttpClient.get(
       '$API_BASE_URL/planetzoo/animals/$id',
     );
-    final animals =
-        List.from(response.data).map((e) => Animal.fromJson(e)).toList();
-    return animals;
+    return Animal.fromJson(response.data);
   }
 
   Future<List<AnimalClass>> getAllAnimalClasses() async {

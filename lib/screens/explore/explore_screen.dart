@@ -75,7 +75,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                           borderSide: BorderSide.none,
                         ),
                       ),
-                      onChanged: (_) => setState(() {}),
+                      onChanged: (value) {
+                        BlocProvider.of<SearchBloc>(context)
+                            .add(SearchStarted(string: value));
+                        setState(() {});
+                      },
                       onSubmitted: (value) =>
                           BlocProvider.of<SearchBloc>(context)
                               .add(SearchStarted(string: value)),
@@ -123,7 +127,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     child: state.status == SearchStatus.loading
                         ? const Center(child: CircularProgressIndicator())
                         : ListView.builder(
-                            itemCount: (state.results ?? []).length,
+                            itemCount: (state.showResults ?? []).length,
                             itemBuilder: (context, index) {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -179,7 +183,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                           ),
                                                           Text(
                                                             state
-                                                                    .results?[
+                                                                    .showResults?[
                                                                         index]
                                                                     .englishName ??
                                                                 '',
@@ -193,7 +197,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                                           ),
                                                           Text(
                                                             state
-                                                                    .results?[
+                                                                    .showResults?[
                                                                         index]
                                                                     .conservationStatus ??
                                                                 '',
@@ -254,7 +258,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                             ),
                                             child: CachedNetworkImage(
                                               imageUrl: state
-                                                      .results?[index].images ??
+                                                      .showResults?[index]
+                                                      .images ??
                                                   '',
                                               width: 100,
                                               height: 100,

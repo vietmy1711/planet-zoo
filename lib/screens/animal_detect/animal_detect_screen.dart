@@ -38,44 +38,50 @@ class _AnimalDetectScreenState extends State<AnimalDetectScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
-        alignment: AlignmentDirectional.topCenter,
+      body: Column(
         children: [
-          CameraPreview(controller),
-          Positioned(
-            bottom: 24 + MediaQuery.of(context).padding.bottom,
-            width: 60,
-            height: 60,
-            child: InkWell(
-              onTap: () => controller.takePicture().then((value) {
-                final path = value.path;
-                final data = File(path).readAsBytesSync();
-                print(data);
-              }),
-              child: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+          Expanded(
+            child: Stack(
+              alignment: AlignmentDirectional.topCenter,
+              children: [
+                CameraPreview(controller),
+                Positioned(
+                  bottom: 24 + MediaQuery.of(context).padding.bottom,
+                  width: 60,
+                  height: 60,
+                  child: InkWell(
+                    onTap: () => controller.takePicture().then((value) {
+                      final path = value.path;
+                      final data = File(path).readAsBytesSync();
+                      print(data);
+                    }),
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                Positioned(
+                  top: 24 + MediaQuery.of(context).padding.top,
+                  left: 16,
+                  width: 24,
+                  height: 24,
+                  child: InkWell(
+                    onTap: Navigator.of(context).pop,
+                    child: const Icon(
+                      Icons.close,
+                      size: 24,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
             ),
           ),
-          Positioned(
-            top: 24 + MediaQuery.of(context).padding.top,
-            left: 16,
-            width: 24,
-            height: 24,
-            child: InkWell(
-              onTap: Navigator.of(context).pop,
-              child: const Icon(
-                Icons.close,
-                size: 24,
-                color: Colors.white,
-              ),
-            ),
-          )
         ],
       ),
     );

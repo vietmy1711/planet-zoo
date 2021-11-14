@@ -2,6 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:planet_zoo/bloc/search/search_bloc.dart';
+import 'package:planet_zoo/route_generator.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodeScreen extends StatefulWidget {
@@ -15,7 +18,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
   QRViewController? controller;
-
+  bool hasPop = false;
   @override
   void reassemble() {
     super.reassemble();
@@ -28,44 +31,48 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: <Widget>[
-              Expanded(
-                flex: 5,
-                child: QRView(
-                  key: qrKey,
-                  onQRViewCreated: _onQRViewCreated,
+    return BlocConsumer<SearchBloc, SearchState>(
+      listener: (context, state) {
+        if (state.status == SearchStatus.qrCodeSuccess &&
+            state.animal != null) {
+          controller?.stopCamera().then((_) {
+            if (!hasPop) {
+              Navigator.of(context)
+                  .popAndPushNamed(animalDetailRoute, arguments: state.animal);
+            }
+            hasPop = true;
+          });
+        }
+      },
+      builder: (context, state) => Scaffold(
+        body: Stack(
+          children: [
+            Column(
+              children: <Widget>[
+                Expanded(
+                  child: QRView(
+                    key: qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                  ),
                 ),
-              ),
-              Expanded(
-                flex: 1,
-                child: Center(
-                  child: (result != null)
-                      ? Text(
-                          'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}')
-                      : const Text('Scan a code'),
-                ),
-              )
-            ],
-          ),
-          Positioned(
-            top: 24 + MediaQuery.of(context).padding.top,
-            left: 16,
-            width: 24,
-            height: 24,
-            child: InkWell(
-              onTap: Navigator.of(context).pop,
-              child: const Icon(
-                Icons.close,
-                size: 24,
-                color: Colors.white,
-              ),
+              ],
             ),
-          )
-        ],
+            Positioned(
+              top: 24 + MediaQuery.of(context).padding.top,
+              left: 16,
+              width: 24,
+              height: 24,
+              child: InkWell(
+                onTap: Navigator.of(context).pop,
+                child: const Icon(
+                  Icons.close,
+                  size: 24,
+                  color: Colors.white,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -73,9 +80,9 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
+      context
+          .read<SearchBloc>()
+          .add(QrCodeScanned(id: int.parse(scanData.code ?? '')));
     });
   }
 

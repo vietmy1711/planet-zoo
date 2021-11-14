@@ -24,6 +24,7 @@ dependencies:
   flutter_bloc: ^7.3.3
   freezed_annotation: ^0.14.2
   json_annotation: ^4.3.0
+  expandable: ^5.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

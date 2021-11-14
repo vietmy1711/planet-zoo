@@ -39,3 +39,12 @@ class SearchWithIdStarted extends SearchEvent {
   @override
   List<Object?> get props => [id];
 }
+
+class QrCodeScanned extends SearchEvent {
+  final int id;
+
+  const QrCodeScanned({required this.id});
+
+  @override
+  List<Object?> get props => [id];
+}
