@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
@@ -53,7 +54,7 @@ class _AnimalDetectScreenState extends State<AnimalDetectScreen> {
                     onTap: () => controller.takePicture().then((value) {
                       final path = value.path;
                       final data = File(path).readAsBytesSync();
-                      print(data);
+                      print(base64Encode(data));
                     }),
                     child: Container(
                       width: 60,

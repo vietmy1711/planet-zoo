@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:planet_zoo/models/animal/animal.dart';
 import 'package:planet_zoo/models/animal_class/animal_class.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../apis/api_provider.dart';
 

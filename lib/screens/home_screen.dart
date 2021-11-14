@@ -25,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
               height: 24,
@@ -39,21 +40,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
                         'Good morning!',
                         style: TextStyle(
-                          color: lightPrimaryColor,
+                          color: Colors.black.withOpacity(0.8),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                      SizedBox(
-                        height: 4,
+                      const SizedBox(
+                        height: 2,
                       ),
-                      Text(
+                      const Text(
                         'Nguyen My',
                         style: TextStyle(
                           color: primaryColor,
                           fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
                       ),
                     ],
@@ -62,7 +66,14 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(
-              height: 8,
+              height: 16,
+            ),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Actions',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -90,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: warningColor,
                     icon: Icons.report,
                     onTap: () => Navigator.of(context, rootNavigator: true)
-                        .pushNamed(qrCodeRoute),
+                        .pushNamed(reportRoute),
                   ),
                 ],
               ),
@@ -98,7 +109,19 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Text(
+                      'News',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
